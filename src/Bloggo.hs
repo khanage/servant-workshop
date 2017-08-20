@@ -11,7 +11,7 @@ import System.Directory         (doesFileExist)
 import System.Environment
 
 prodMain :: IO ()
-prodMain = runAppOn 8080
+prodMain = runAppOn 8080 Nothing
 
 develMain :: IO ()
 develMain = race_ watchTermFile $ do
@@ -19,7 +19,7 @@ develMain = race_ watchTermFile $ do
     displayPort <- getEnv "DISPLAY_PORT"
     putStrLn $ "Running in development mode on port " ++ show port
     putStrLn $ "But you should connect to port " ++ displayPort
-    runAppOn port
+    runAppOn port Nothing
 
 -- | Would certainly be more efficient to use fsnotify, but this is
 -- simpler.

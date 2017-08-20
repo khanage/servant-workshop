@@ -16,7 +16,9 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Bloggo
+                     , Bloggo.Api
                      , Bloggo.Machinery
+                     , Bloggo.Types
   default-language:    Haskell2010
   default-extensions:  OverloadedStrings
                      , ScopedTypeVariables
