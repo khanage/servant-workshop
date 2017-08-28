@@ -22,12 +22,15 @@ library
                      , ScopedTypeVariables
   build-depends:       base >= 4.7 && < 5
                      , wreq
+                     , http-media
                      , servant-server
                      , servant-auth
                      , servant-auth-server
                      , persistent
+                     , persistent-template
                      , persistent-sqlite
-                     , esqueleto
+                     , resource-pool
+                     , jose
                      , lens
                      , text
                      , bytestring
