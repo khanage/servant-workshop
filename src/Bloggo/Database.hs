@@ -1,0 +1,2 @@
+module Bloggo.Database where
+

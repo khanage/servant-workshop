@@ -3,17 +3,22 @@
 module Bloggo.Machinery where
 
 import           Bloggo.Api
+import           Bloggo.Item
 import           Bloggo.Types
 import           Control.Lens               ((&))
+import           Control.Monad.Logger       (runStdoutLoggingT, runNoLoggingT)
 import           Control.Monad.Trans.Reader
 import qualified Data.Text.IO               as T
+import           Data.Time
+import           Database.Persist
+import           Database.Persist.Sqlite
 import           Network.Wai
 import           Network.Wai.Handler.Warp
 import           Servant
 import qualified Servant.Auth               as Auth
 import qualified Servant.Auth.Server        as Auth
 import           System.IO
-import Data.Time
+import Crypto.JOSE.JWK (JWK)
 
 runAppOn
   :: Port
@@ -29,9 +34,12 @@ runAppOn port expiryMod = do
 
     api = Proxy :: Proxy (BloggoApi '[Auth.JWT])
 
-  config <- loadConfig jwtConfig expiryMod
+  pool <- runStdoutLoggingT $ createSqlitePool "bloggo.db" 4
+  flip runSqlPool pool $ runMigration migrateAll
 
   let
+    config = BloggoConfig jwtConfig expiryMod "http://localhost:5000" pool
+
     startupMessage = do
       hPutStrLn stderr ("listening on port " ++ show port)
       T.hPutStrLn stderr (layoutWithContext api serverContext)
@@ -44,16 +52,3 @@ runAppOn port expiryMod = do
     & flip enter server
     & serveWithContext api serverContext
     & runSettings settings
-
-bloggoToHandler
-  :: BloggoConfig
-  -> Bloggo :~> Handler
-bloggoToHandler config =
-  NT $ Handler . flip runReaderT config . unBloggo
-
-loadConfig
-  :: Auth.JWTSettings
-  -> Maybe JwtExpirer
-  -> IO BloggoConfig
-loadConfig jwtSettings timeMod =
-  pure $ BloggoConfig jwtSettings timeMod

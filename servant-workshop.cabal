@@ -19,17 +19,24 @@ library
                      , Bloggo.Api
                      , Bloggo.Machinery
                      , Bloggo.Types
+                     , Bloggo.Database
+                     , Bloggo.UserData
+                     , Bloggo.Item
   default-language:    Haskell2010
   default-extensions:  OverloadedStrings
                      , ScopedTypeVariables
   build-depends:       base >= 4.7 && < 5
                      , wreq
+                     , http-media
                      , servant-server
                      , servant-auth
                      , servant-auth-server
+                     , servant
                      , persistent
+                     , persistent-template
                      , persistent-sqlite
-                     , esqueleto
+                     , resource-pool
+                     , jose
                      , lens
                      , text
                      , bytestring
@@ -46,7 +53,19 @@ library
                      , jose
                      , time
 
-executable servant-workshop-exe
+executable another-service
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  hs-source-dirs: .
+  main-is: Standalone.hs
+  default-language:    Haskell2010
+  default-extensions:  OverloadedStrings
+  build-depends:       base
+                     , servant-server
+                     , aeson
+                     , warp
+                     , wai
+
+executable main-service
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   hs-source-dirs:      .
   main-is:             Main.hs
