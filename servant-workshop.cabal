@@ -47,13 +47,26 @@ library
                      , jose
                      , time
 
-executable servant-workshop-exe
+executable main-service
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   hs-source-dirs:      .
   main-is:             Main.hs
   build-depends:       base
                      , servant-workshop
   default-language:    Haskell2010
+
+executable another-service
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  hs-source-dirs:      .
+  main-is:             Another.hs
+  build-depends:       base
+                     , servant-server
+                     , text
+                     , aeson
+                     , wai
+                     , warp
+  default-language:    Haskell2010
+
 
 test-suite servant-workshop-test
   type:                exitcode-stdio-1.0
