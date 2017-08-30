@@ -1,7 +1,7 @@
 name:                servant-workshop
-version:             0.1.0.0
--- synopsis:
--- description:
+version:             0.1.0.1
+synopsis:            a basis for experimentation at Compose 2017
+description:         This repository is used as a base for a "full" servant application, with JWT auth, and testing setup and ready to go.
 homepage:            https://github.com/khanage/servant-workshop#readme
 license:             BSD3
 license-file:        LICENSE
